@@ -1,5 +1,5 @@
 {
-  "name": "@mona-health/react-input-mask",
+  "name": "@kiselev/react-input-mask",
   "description": "(yet another) Masked input component for React",
   "version": "3.0.1",
   "homepage": "https://github.com/mona-health/react-input-mask",
