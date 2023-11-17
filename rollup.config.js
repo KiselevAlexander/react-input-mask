@@ -1,10 +1,10 @@
 import babel from "rollup-plugin-babel";
+import copy from "rollup-plugin-copy";
 import { terser } from "rollup-plugin-terser";
 import resolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
 import replace from "rollup-plugin-replace";
 import { sizeSnapshot } from "rollup-plugin-size-snapshot";
-import copy from 'rollup-plugin-copy';
 import protoToAssign from "./rollup.proto-to-assign.plugin";
 
 const input = "./src/index.js";
@@ -22,9 +22,7 @@ const plugins = [
   protoToAssign(),
   sizeSnapshot(),
   copy({
-    targets: [
-      { src: 'src/index.d.ts', dest: 'dist' },
-    ]
+    targets: [{ src: "./src/index.d.ts", dest: "dist" }]
   })
 ];
 const minifiedPlugins = [
