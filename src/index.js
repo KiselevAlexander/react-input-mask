@@ -285,6 +285,8 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
     value: isMasked && isControlled ? lastValue : props.value
   };
 
+  delete inputProps.inputRef;
+
   if (children) {
     validateChildren(props, children);
 
