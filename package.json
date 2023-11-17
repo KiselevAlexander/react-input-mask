@@ -2,11 +2,11 @@
   "name": "@kiselev/react-input-mask",
   "description": "(yet another) Masked input component for React",
   "version": "3.0.1",
-  "homepage": "https://github.com/mona-health/react-input-mask",
+  "homepage": "https://github.com/KiselevAlexander/react-input-mask",
   "license": "MIT",
   "author": "Nikita Lobachev <sanniassin@gmail.com>",
   "contributors": [
-    "Ian Channing <ian.channing@mona.health>"
+    "Ian Channing <alexander.kiselev@mail.ru>"
   ],
   "keywords": [
     "react",
@@ -95,7 +95,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mona-health/react-input-mask.git"
+    "url": "https://github.com/KiselevAlexander/react-input-mask.git"
   },
   "dependencies": {
     "invariant": "^2.2.4",
