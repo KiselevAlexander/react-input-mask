@@ -69,6 +69,7 @@
     "webpack-dev-server": "^3.10.1"
   },
   "main": "index.js",
+  "typings": "./src/types.d.ts"
   "files": [
     "lib",
     "dist"
