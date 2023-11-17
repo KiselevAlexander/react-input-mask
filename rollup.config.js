@@ -4,6 +4,7 @@ import resolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
 import replace from "rollup-plugin-replace";
 import { sizeSnapshot } from "rollup-plugin-size-snapshot";
+import copy from 'rollup-plugin-copy';
 import protoToAssign from "./rollup.proto-to-assign.plugin";
 
 const input = "./src/index.js";
@@ -19,7 +20,12 @@ const plugins = [
   resolve(),
   commonjs(),
   protoToAssign(),
-  sizeSnapshot()
+  sizeSnapshot(),
+  copy({
+    targets: [
+      { src: 'src/index.d.ts', dest: 'dist' },
+    ]
+  })
 ];
 const minifiedPlugins = [
   ...plugins,

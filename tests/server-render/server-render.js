@@ -3,7 +3,7 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { expect } from "chai"; // eslint-disable-line import/no-extraneous-dependencies
-import InputElement from "../../index";
+import InputElement from "../../src";
 
 describe("Test prerender", () => {
   it("should return a string", () => {
