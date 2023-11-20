@@ -160,8 +160,7 @@ function useValue(inputRef, initialValue) {
   };
 }
 
-export function useInputState(initialValue, isMasked) {
-  const inputRef = useRef();
+export function useInputState(initialValue, isMasked, inputRef) {
   const { getSelection, getLastSelection, setSelection } = useSelection(
     inputRef,
     isMasked

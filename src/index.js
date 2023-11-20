@@ -1,4 +1,9 @@
-import React, { useLayoutEffect, forwardRef } from "react";
+import React, {
+  useLayoutEffect,
+  forwardRef,
+  useRef,
+  useImperativeHandle
+} from "react";
 import PropTypes from "prop-types";
 
 import { useInputState, useInputElement, usePrevious } from "./hooks";
@@ -10,10 +15,12 @@ import {
 
 import { defer } from "./utils/defer";
 import { isInputFocused } from "./utils/input";
-import { isFunction, toString, getElementDocument } from "./utils/helpers";
+import { toString, getElementDocument } from "./utils/helpers";
 import MaskUtils from "./utils/mask";
 
 const InputMask = forwardRef(function InputMask(props, forwardedRef) {
+  const inputElementRef = useRef(null);
+  useImperativeHandle(forwardedRef, () => inputElementRef, []);
   const {
     alwaysShowMask,
     children,
@@ -36,17 +43,17 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
     (isControlled ? props.value : props.defaultValue) || ""
   );
 
-  const {
-    inputRef,
-    getInputState,
-    setInputState,
-    getLastInputState
-  } = useInputState(initialValue, isMasked);
-  const getInputElement = useInputElement(inputRef);
+  const { getInputState, setInputState, getLastInputState } = useInputState(
+    initialValue,
+    isMasked,
+    inputElementRef
+  );
+  const getInputElement = useInputElement(inputElementRef);
 
   function onChange(event) {
     const currentState = getInputState();
     const previousState = getLastInputState();
+
     let newInputState = maskUtils.processChange(currentState, previousState);
 
     if (beforeMaskedStateChange) {
@@ -66,13 +73,15 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
 
   function onFocus(event) {
     // If autoFocus property is set, focus event fires before the ref handler gets called
-    inputRef.current = event.target;
+    if (!inputElementRef.current) {
+      inputElementRef.current = event.target;
+    }
 
     const currentValue = getInputState().value;
 
     if (isMasked && !maskUtils.isValueFilled(currentValue)) {
       let newValue = maskUtils.formatValue(currentValue);
-      let newSelection = maskUtils.getDefaultSelectionForValue(newValue);
+      const newSelection = maskUtils.getDefaultSelectionForValue(newValue);
       let newInputState = {
         value: newValue,
         selection: newSelection
@@ -84,7 +93,6 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
           nextState: newInputState
         });
         newValue = newInputState.value;
-        newSelection = newInputState.selection;
       }
 
       setInputState(newInputState);
@@ -264,17 +272,17 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
 
     setInputState(newInputState);
   });
-
-  const refCallback = node => {
-    inputRef.current = node;
-
-    // if a ref callback is passed to InputMask
-    if (isFunction(forwardedRef)) {
-      forwardedRef(node);
-    } else if (forwardedRef !== null && typeof forwardedRef === "object") {
-      forwardedRef.current = node;
-    }
-  };
+  //
+  // const refCallback = node => {
+  //     inputRef.current = node;
+  //
+  //     // if a ref callback is passed to InputMask
+  //     if (isFunction(forwardedRef)) {
+  //         forwardedRef(node);
+  //     } else if (forwardedRef !== null && typeof forwardedRef === "object") {
+  //         forwardedRef.current = node;
+  //     }
+  // };
 
   const inputProps = {
     ...restProps,
@@ -285,17 +293,18 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
     value: isMasked && isControlled ? lastValue : props.value
   };
 
-  delete inputProps.inputRef;
-
   if (children) {
     validateChildren(props, children);
 
     // {@link https://stackoverflow.com/q/63149840/327074}
     const onlyChild = React.Children.only(children);
-    return React.cloneElement(onlyChild, { ...inputProps, ref: refCallback });
+    return React.cloneElement(onlyChild, {
+      ...inputProps,
+      ref: inputElementRef
+    });
   }
 
-  return <input ref={refCallback} {...inputProps} />;
+  return <input ref={inputElementRef} {...inputProps} />;
 });
 
 InputMask.displayName = "InputMask";
