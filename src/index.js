@@ -20,7 +20,7 @@ import MaskUtils from "./utils/mask";
 
 const InputMask = forwardRef(function InputMask(props, forwardedRef) {
   const inputElementRef = useRef(null);
-  useImperativeHandle(forwardedRef, () => inputElementRef, []);
+  useImperativeHandle(forwardedRef, () => inputElementRef.current, []);
   const {
     alwaysShowMask,
     children,
